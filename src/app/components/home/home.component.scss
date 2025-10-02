@@ -1,0 +1,98 @@
+/* home.component.scss */
+.example-spacer {
+  flex: 1 1 auto;
+}
+
+mat-card {
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15) !important;
+  }
+}
+
+.hero-section {
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+}
+
+img {
+  object-fit: cover;
+}
+
+.text-white-50 {
+  color: rgba(255, 255, 255, 0.5) !important;
+}
+
+a {
+  transition: color 0.2s ease;
+
+  &:hover {
+    color: #fff !important;
+  }
+}
+
+.card {
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15) !important;
+  }
+}
+
+@media (max-width: 1200px) {
+  .display-4 {
+    font-size: 3rem;
+  }
+}
+
+@media (max-width: 992px) {
+  .display-5 {
+    font-size: 2.5rem;
+  }
+
+  .display-6 {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .display-4,
+  .display-5,
+  .display-6 {
+    font-size: 2rem;
+  }
+
+  .lead {
+    font-size: 1.1rem;
+  }
+
+  .hero-section .row > div {
+    text-align: center;
+  }
+
+  .hero-section img {
+    margin-top: 2rem;
+  }
+
+  .d-flex.gap-2 {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 576px) {
+  .display-4,
+  .display-5,
+  .display-6 {
+    font-size: 1.75rem;
+  }
+
+  .badge {
+    font-size: 0.875rem;
+  }
+
+  mat-form-field {
+    min-width: 100% !important;
+  }
+}

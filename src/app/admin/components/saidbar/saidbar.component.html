@@ -1,0 +1,19 @@
+<mat-sidenav-container class="sidenav-container">
+  <mat-sidenav mode="side" opened class="sidenav">
+    <h3 class="p-2 text-center fw-bolder">Admin Panel</h3>
+
+    <mat-accordion multi>
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title> Manage Items </mat-panel-title>
+        </mat-expansion-panel-header>
+        <button mat-button class="w-100" routerLink="/modules/admin/vegetable/add">Add Item</button>
+        <button mat-button class="w-100"  routerLink="/modules/admin/vegetable/view-item">View Item</button>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </mat-sidenav>
+
+  <mat-sidenav-content class="bg-light p-3">
+    <router-outlet></router-outlet>
+  </mat-sidenav-content>
+</mat-sidenav-container>

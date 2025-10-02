@@ -1,0 +1,141 @@
+<div class="container mt-4">
+  <form [formGroup]="itemForm" (ngSubmit)="onSubmit()" class="shadow-lg p-4 m-2">
+    
+    <h2 class="mb-4">Add / Edit Item</h2>
+    <div class="row g-3">
+
+      <!-- Name -->
+      <div class="col-md-6">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Name</mat-label>
+          <input matInput formControlName="name" placeholder="e.g., Apple">
+          <mat-error *ngIf="itemForm.get('name')?.invalid && itemForm.get('name')?.touched">
+            Name is required and must be at least 2 characters.
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <!-- Category -->
+      <div class="col-md-6">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Category</mat-label>
+          <mat-select formControlName="category">
+            <mat-option value="Vegetable">Vegetable</mat-option>
+            <mat-option value="Fruit">Fruit</mat-option>
+            <mat-option value="Organic">Organic</mat-option>
+          </mat-select>
+          <mat-error *ngIf="itemForm.get('category')?.invalid && itemForm.get('category')?.touched">
+            Category is required
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <!-- Price -->
+      <div class="col-md-6">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Price ($)</mat-label>
+          <input matInput type="number" formControlName="price" placeholder="e.g., 2.99">
+          <mat-error *ngIf="itemForm.get('price')?.invalid && itemForm.get('price')?.touched">
+            Price must be greater than 0.
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <!-- Discount -->
+      <div class="col-md-6">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Discount Price ($)</mat-label>
+          <input matInput type="number" formControlName="discountPrice" placeholder="Optional">
+        </mat-form-field>
+      </div>
+
+      <!-- Quantity -->
+      <div class="col-md-6">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Quantity</mat-label>
+          <input matInput type="number" formControlName="quantity">
+          <mat-error *ngIf="itemForm.get('quantity')?.invalid && itemForm.get('quantity')?.touched">
+            Quantity must be at least 1.
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <!-- Quantity Unit -->
+      <div class="col-md-6">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Quantity Unit</mat-label>
+          <mat-select formControlName="quantityUnit">
+            <mat-option value="500 gms">500 gms</mat-option>
+            <mat-option value="1 kg">1 kg</mat-option>
+            <mat-option value="2 kg">2 kg</mat-option>
+          </mat-select>
+          <mat-error *ngIf="itemForm.get('quantityUnit')?.invalid && itemForm.get('quantityUnit')?.touched">
+            Quantity unit is required
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <!-- Shop Name -->
+      <div class="col-md-6">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Shop Name</mat-label>
+          <input matInput formControlName="shopName" placeholder="e.g., Green Market">
+          <mat-error *ngIf="itemForm.get('shopName')?.invalid && itemForm.get('shopName')?.touched">
+            Shop name is required and must be at least 2 characters.
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <!-- Image URL / File Upload -->
+      <div class="col-md-6">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Image URL (or upload file below)</mat-label>
+          <input matInput formControlName="imageUrl" placeholder="e.g., https://example.com/image.jpg">
+        </mat-form-field>
+
+        <div class="mt-2">
+          <label for="fileInput">Or choose a file:</label>
+          <input 
+            type="file" 
+            id="fileInput" 
+            (change)="onFileSelected($event)" 
+            accept="image/*"
+          />
+          <mat-error *ngIf="fileError" class="text-danger">{{ fileError }}</mat-error>
+        </div>
+
+        <!-- Image Preview -->
+        <div *ngIf="previewImageUrl" class="mt-2">
+          <img [src]="previewImageUrl" alt="Preview" style="max-height: 100px; max-width: 100px; object-fit: cover; border: 1px solid #ccc;">
+        </div>
+      </div>
+
+      <!-- Details -->
+      <div class="col-md-6">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Details</mat-label>
+          <textarea matInput formControlName="details" rows="3"></textarea>
+        </mat-form-field>
+      </div>
+
+      <!-- Additional Details -->
+      <div class="col-md-6">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Additional Details</mat-label>
+          <textarea matInput formControlName="additionalDetails" rows="3"></textarea>
+        </mat-form-field>
+      </div>
+
+      <!-- Submit -->
+      <div class="col-12 d-flex gap-2 d-lg-flex justify-content-end">
+        <button mat-flat-button color="primary" type="submit" [disabled]="itemForm.invalid || isSubmitting">
+          {{ editingItemId ? 'Update' : 'Save' }}
+        </button>
+        <button mat-stroked-button type="button" (click)="onCancelEdit()" [disabled]="isSubmitting">
+          {{ editingItemId ? 'Cancel' : 'Reset' }}
+        </button>
+      </div>
+
+    </div>
+  </form>
+</div>

@@ -1,1 +1,24 @@
 /* You can add global styles to this file, and also import other style files */
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+.professional-snackbar {
+  background-color: #323232;       
+  color: #ffffff;                
+  font-size: 14px;              
+  border-radius: 6px;            
+  padding: 14px 20px;            
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2); 
+  display: flex;
+  align-items: center;
+  animation: slideFadeIn 0.4s ease forwards, slideFadeOut 0.4s ease 3.1s forwards;
+}
+
+@keyframes slideFadeIn {
+  0% { transform: translateX(50px); opacity: 0; }
+  100% { transform: translateX(0); opacity: 1; }
+}
+@keyframes slideFadeOut {
+  0% { opacity: 1; }
+  100% { opacity: 0; }
+}
