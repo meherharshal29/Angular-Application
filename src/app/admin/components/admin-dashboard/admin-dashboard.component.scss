@@ -1,0 +1,27 @@
+.dashboard-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.dashboard-header {
+  flex-shrink: 0;
+  z-index: 10;
+}
+
+.dashboard-content {
+  flex: 1 0 auto;
+}
+
+.card h5 {
+  font-weight: 600;
+}
+
+.card button {
+  margin-top: 10px;
+}
+.user-info span {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

@@ -6,6 +6,10 @@
   width: 300px;
 }
 
-.content {
-  padding: 16px;
+.mat-expansion-panel-header {
+  font-weight: 500;
+}
+
+.mat-sidenav-content {
+  overflow-y: auto;
 }

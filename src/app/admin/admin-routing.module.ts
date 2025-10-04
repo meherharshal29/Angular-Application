@@ -1,6 +1,8 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AdminLoginComponent } from './components/admin-login/admin-login.component';
+import { AdminDashboardComponent } from './components/admin-dashboard/admin-dashboard.component';
+import { adminGuard } from '../guard/admin.guard';
 
 const routes: Routes = [
   {
@@ -8,8 +10,19 @@ const routes: Routes = [
     component :AdminLoginComponent
   },
   {
+    path:'mainpanel',
+    canActivate:[adminGuard],
+    children:[
+       {
+        path:'dashboard',
+        component:AdminDashboardComponent
+       }
+    ]
+  },
+  {
     path:"vegetable",
-    loadChildren: () => import("./modules/vegetables/vegetables.module").then(m => m.VegetablesModule)
+    loadChildren: () => import("./modules/vegetables/vegetables.module").then(m => m.VegetablesModule),
+    canActivate:[adminGuard]
   }
 ];
 

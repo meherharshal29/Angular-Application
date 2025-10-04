@@ -13,7 +13,6 @@ export const authGuard: CanActivateFn = (route, state) => {
   if (currentUser) {
     return true;
   } else {
-    // Show animated toast
     snackBar.open('Please login to access this page', '✖', {
       duration: 4000,
       horizontalPosition: 'right',
