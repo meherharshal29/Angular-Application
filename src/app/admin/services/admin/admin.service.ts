@@ -14,12 +14,14 @@ interface RegisterUser {
 export class AdminService {
   private isBrowser: boolean;
 
-  constructor(@Inject(PLATFORM_ID) private platformId: Object,private router: Router) {
+  constructor(@Inject(PLATFORM_ID) private platformId: Object, private router: Router) {
     this.isBrowser = isPlatformBrowser(this.platformId);
+    this.addDefaultAdmin();
   }
 
-  addDefaultAdmin() {
-    if (!this.isBrowser) return; 
+  // Add default admin (only if not present in localStorage)
+  private addDefaultAdmin() {
+    if (!this.isBrowser) return;
 
     const defaultAdmin: RegisterUser = {
       email: 'admin@gmail.com',
@@ -28,33 +30,47 @@ export class AdminService {
     };
 
     let users: RegisterUser[] = [];
-    const localUsers = localStorage.getItem('users');
+    const localUsers = localStorage.getItem('admins');
     if (localUsers) {
       users = JSON.parse(localUsers);
     }
 
     if (!users.some(user => user.email === defaultAdmin.email)) {
       users.push(defaultAdmin);
-      localStorage.setItem('users', JSON.stringify(users));
+      localStorage.setItem('admins', JSON.stringify(users));
     }
   }
 
-    logout(): void {
-    localStorage.removeItem('currentUser');
-    this.router.navigate(['/modules/admin/admin']);
-  }
+  // Admin login
+  login(email: string, password: string): boolean {
+    if (!this.isBrowser) return false;
 
-  // New: Check if admin is logged in
-  isAdminLoggedIn(): boolean {
-    if (typeof window !== 'undefined') {
-      const currentUser = localStorage.getItem('currentUser');
-      if (currentUser) {
-        const user = JSON.parse(currentUser);
-        return user.role === 'admin';
-      }
+    const admins: RegisterUser[] = JSON.parse(localStorage.getItem('admins') || '[]');
+    const admin = admins.find(u => u.email === email && u.password === password);
+    if (admin) {
+      localStorage.setItem('currentAdmin', JSON.stringify(admin));
+      return true;
     }
     return false;
   }
 
-  
+  // Admin logout
+  logout(): void {
+    localStorage.removeItem('currentAdmin');
+    this.router.navigate(['/modules/admin/admin']); // redirect to admin login page
+  }
+
+  // Check if admin is logged in
+  isAdminLoggedIn(): boolean {
+    if (!this.isBrowser) return false;
+    const currentAdmin = localStorage.getItem('currentAdmin');
+    return !!currentAdmin;
+  }
+
+  // Get current admin details
+  getCurrentAdmin(): RegisterUser | null {
+    if (!this.isBrowser) return null;
+    const currentAdmin = localStorage.getItem('currentAdmin');
+    return currentAdmin ? JSON.parse(currentAdmin) : null;
+  }
 }

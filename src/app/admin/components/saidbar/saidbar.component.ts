@@ -31,14 +31,14 @@ export class SaidbarComponent implements AfterViewInit, OnInit {
   // Listen for login/logout changes in localStorage
   @HostListener('window:storage', ['$event'])
   onStorageChange(event: StorageEvent) {
-    if (event.key === 'currentUser') {
+    if (event.key === 'currentAdmin') {
       this.checkLoginStatus();
     }
   }
 
   private checkLoginStatus(): void {
     if (typeof window !== 'undefined') {
-      this.isLoggedIn = !!localStorage.getItem('currentUser');
+      this.isLoggedIn = !!localStorage.getItem('currentAdmin');
     }
   }
 

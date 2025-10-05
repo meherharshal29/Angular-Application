@@ -14,7 +14,7 @@ export const adminGuard: CanActivateFn = (route, state) => {
   }
 
   // Now safe to use localStorage
-  const userStr = localStorage.getItem('currentUser');
+  const userStr = localStorage.getItem('currentAdmin');
   const currentUser = userStr ? JSON.parse(userStr) : null;
 
   if (currentUser && currentUser.role === 'admin') {

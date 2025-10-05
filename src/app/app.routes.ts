@@ -3,12 +3,24 @@ import { HomeComponent } from './components/home/home.component';
 import { AboutComponent } from './components/about/about.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import { authGuard } from './guard/auth.guard';
+import { VegetableComponent } from './components/vegetable/vegetable.component';
+import { FruitsComponent } from './components/fruits/fruits.component';
 
 export const routes: Routes = [
   { path: "", component: HomeComponent },
   { path: "about", component: AboutComponent,canActivate:[authGuard] },
   { path: "profile", component: ProfileComponent ,canActivate:[authGuard]},
-
+  {
+    path:'products',
+    children:[
+      {
+      path :'vegetables' , component:VegetableComponent, canActivate:[authGuard]
+      },
+      {
+        path :'fruits' , component:FruitsComponent , canActivate:[authGuard]
+      }
+    ]
+  },
   {
     path: "modules",
     children: [

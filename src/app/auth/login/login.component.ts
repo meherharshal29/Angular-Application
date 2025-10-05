@@ -83,7 +83,7 @@ export class LoginComponent {
       } catch (error) {
         this.toastr.error('Invalid email or password', 'Error');
       } finally {
-        this.isLoading = false;  // Ensure reset even on errors
+        this.isLoading = false;  
       }
     }
   }

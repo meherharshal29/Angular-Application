@@ -6,14 +6,9 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { MaterialModule } from '../../../shared/materials/material/material.module';
 
-interface RegisterUser {
-  email: string;
-  password: string;
-  role: string;
-}
-
 @Component({
   selector: 'app-admin-login',
+  standalone: true,
   imports: [FormsModule, CommonModule, ReactiveFormsModule, MaterialModule],
   templateUrl: './admin-login.component.html',
   styleUrls: ['./admin-login.component.scss']
@@ -22,10 +17,10 @@ export class AdminLoginComponent implements OnInit {
   email: string = '';
   password: string = '';
   loginError: string = '';
-  isLoading: boolean = false;  // Show progress bar
-  progress: number = 0;        // Progress value
+  isLoading: boolean = false;
+  progress: number = 0;
   showProgress: boolean = false;
-  showPassword: boolean = false; 
+  showPassword: boolean = false;
 
   constructor(
     private adminService: AdminService,
@@ -34,7 +29,8 @@ export class AdminLoginComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.adminService.addDefaultAdmin();
+    // Ensure default admin exists
+    this.adminService['addDefaultAdmin']?.();
   }
 
   onSubmit(): void {
@@ -48,29 +44,22 @@ export class AdminLoginComponent implements OnInit {
     this.showProgress = true;
     this.progress = 0;
 
-    // Increment progress 0 → 100
+    // Fake progress bar (loading effect)
     const interval = setInterval(() => {
       this.progress += 10;
       if (this.progress >= 100) {
         clearInterval(interval);
         this.checkLogin();
       }
-    }, 300); // 200ms per 10% → 3 seconds total
+    }, 300);
   }
 
   private checkLogin(): void {
-    const users: RegisterUser[] = JSON.parse(localStorage.getItem('users') || '[]');
-    const adminUser = users.find(user => 
-      user.email === this.email && 
-      user.password === this.password && 
-      user.role === 'admin'
-    );
+    const success = this.adminService.login(this.email, this.password);
 
-    if (adminUser) {
-      localStorage.setItem('currentUser', JSON.stringify(adminUser));
+    if (success) {
       this.loginError = '';
       this.toastr.success('Admin login successful!', 'Welcome Admin');
-
       this.router.navigate(['/modules/admin/mainpanel/dashboard']);
     } else {
       this.loginError = 'Invalid email or password.';

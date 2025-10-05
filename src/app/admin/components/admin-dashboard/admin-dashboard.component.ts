@@ -23,7 +23,7 @@ export class AdminDashboardComponent implements OnInit {
   constructor(private router: Router) {}
 
   ngOnInit(): void {
-    const currentUserStr = localStorage.getItem('currentUser');
+    const currentUserStr = localStorage.getItem('currentAdmin');
     if (currentUserStr) {
       try {
         this.currentUser = JSON.parse(currentUserStr);
@@ -34,7 +34,7 @@ export class AdminDashboardComponent implements OnInit {
         this.logout();
       }
     } else {
-      this.router.navigate(['/admin-login']);
+      this.router.navigate(['/admin']);
     }
   }
 

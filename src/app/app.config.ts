@@ -11,15 +11,16 @@ export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes),
     provideClientHydration(withEventReplay()),
-    provideAnimations(), 
+    provideAnimations(),
+    provideHttpClient(withFetch()),
     importProvidersFrom(
       ToastrModule.forRoot({
         positionClass: 'toast-top-right',
         closeButton: true,
         preventDuplicates: true
       }),
-      NgxSpinnerModule
+      NgxSpinnerModule.forRoot() ,
+      
     ),
-    provideHttpClient(withFetch())
   ]
 };

@@ -96,3 +96,12 @@ a {
     min-width: 100% !important;
   }
 }
+
+.clickable-card {
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.clickable-card:hover {
+  transform: translateY(-5px);
+}

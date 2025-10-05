@@ -1,0 +1,50 @@
+.card-image-wrapper {
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+}
+
+.card-image-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-top-right-radius: 10px;
+  border-top-left-radius: 10px;
+}
+
+.price-section {
+  display: flex;
+  flex-wrap: wrap; /* Wrap long text on small screens */
+  justify-content: flex-start;
+  align-items: start;
+  gap: 0.5rem;
+  font-size: 0.95rem;
+}
+
+.original-price {
+  text-decoration: line-through;
+}
+
+.discount {
+  font-weight: bold;
+}
+
+.mat-card-actions {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+@media (max-width: 576px) {
+  .card-image-wrapper {
+    width: 100%;
+    height: 180px;
+  }
+  .price-section {
+    font-size: 0.85rem;
+  }
+}

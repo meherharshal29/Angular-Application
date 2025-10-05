@@ -82,6 +82,12 @@
                     </div>
                   </div>
 
+                  <!-- Progress Bar -->
+                  <div *ngIf="showProgress$ | async" class="mt-3">
+                    <mat-progress-bar mode="determinate" [value]="progress$ | async"></mat-progress-bar>
+                    <div class="text-center mt-1">{{ progress$ | async }}%</div>
+                  </div>
+
                   <!-- Submit Button -->
                   <button type="submit" class="btn btn-theme btn-block" [disabled]="registerForm.invalid || isLoading">
                     {{ isLoading ? 'Registering...' : 'Register' }}
