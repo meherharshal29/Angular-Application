@@ -4,39 +4,67 @@
       <mat-card class="h-100 shadow-sm">
 
         <!-- Image -->
-        <div class="card-image-wrapper">
-          <img mat-card-image [src]="item.imageUrl" [alt]="item.name"  />
+        <div class="card-image-wrapper object-fit-cover" (click)="viewDetails(item.id)">
+          <img mat-card-image
+               [src]="item.imageUrl || 'https://rkmrajahmundry.org/wp-content/uploads/2020/04/default-placeholder.png'"
+               [alt]="item.name"
+            >
         </div>
 
-        <!-- Name -->
+        <!-- Name + Details -->
         <mat-card-header>
-          <mat-card-title>{{ item.name }}</mat-card-title>
+          <mat-card-title>
+            {{ item.name }}
+            <p class="text-start m-0 p-0 fs-6 text-secondary"
+               style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%;">
+              {{ item.details }}
+            </p>
+          </mat-card-title>
         </mat-card-header>
 
         <!-- Price -->
         <mat-card-content class="text-start">
           <div class="price-section">
             <span class="current-price text-success fw-medium">
-              ₹{{ item.price }} <!-- Discounted Price -->
+              ₹{{ item.price }}
             </span>
-            <span *ngIf="item.originalPrice" class="original-price text-muted">
+            <span *ngIf="item.originalPrice" class="text-muted text-decoration-line-through ms-2">
               ₹{{ item.originalPrice }}
-            </span>
-            <span *ngIf="item.originalPrice" class="discount text-danger">
-              ({{ item.price }}% off)
             </span>
           </div>
         </mat-card-content>
 
-        <!-- Actions -->
-        <mat-card-actions class="d-flex align-items-center">
-          <button mat-icon-button color="warn" class="text-warning" >
-            <mat-icon>add_shopping_cart</mat-icon>
-          </button>
-          <button mat-stroked-button color="primary" class="ms-auto" >
+        <!-- Actions: Cart + Quantity + Buy Now -->
+        <mat-card-actions class="d-flex align-items-center justify-content-lg-between">
+
+          <!-- Cart & Quantity Control -->
+          <div class="d-flex align-items-center">
+            <button mat-icon-button color="primary" (click)="addToCart(item)">
+              <mat-icon>add_shopping_cart</mat-icon>
+            </button>
+
+            <div *ngIf="getItemQuantity(item.id) > 0"
+                 class="quantity-control d-flex align-items-center fs-6 rounded-pill border">
+              <button mat-icon-button color="primary"  (click)="decreaseQuantity(item)">
+                <mat-icon class="fs-6">remove</mat-icon>
+              </button>
+
+              <span class="mx-2 fw-medium text-success fs-6">
+                {{ getItemQuantity(item.id) || 0 }}
+              </span>
+
+              <button mat-icon-button color="primary" (click)="increaseQuantity(item)">
+                <mat-icon class="fs-6">add</mat-icon>
+              </button>
+            </div>
+          </div>
+
+          <!-- Buy Now Button -->
+          <button mat-stroked-button class="text-success">
             <mat-icon>flash_on</mat-icon>
             Buy Now
           </button>
+
         </mat-card-actions>
 
       </mat-card>

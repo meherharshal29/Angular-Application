@@ -1,0 +1,75 @@
+<div class="container py-4 cart-container p-0 m-auto">
+  <h4 class="mb-4 fw-semibold text-success">
+    Shopping Cart <span class="text-muted">({{ cartCount }})</span>
+  </h4>
+
+  <!-- Empty Cart -->
+  <div *ngIf="cartItems.length === 0" class="alert alert-info shadow-sm">
+    🛒 Your cart is empty. <a routerLink="/products/items" class="fw-bold">Continue shopping</a>
+  </div>
+
+  <!-- Cart Items -->
+  <div *ngIf="cartItems.length > 0">
+    <mat-card class="cart-item shadow-sm mb-3 rounded-3" *ngFor="let item of cartItems">
+      <div class="row align-items-center g-3 p-2">
+        
+        <!-- Image -->
+        <div class="col-12 col-md-2 text-center">
+          <img [src]="item.imageUrl || 'https://rkmrajahmundry.org/wp-content/uploads/2020/04/default-placeholder.png'"
+               [alt]="item.name"
+               class="img-fluid rounded-3 product-img">
+        </div>
+
+        <!-- Details -->
+        <div class="col-12 col-md-4">
+          <h5 class="fw-semibold">{{ item.name }}</h5>
+          <p class="text-muted mb-1">{{ item.category }}</p>
+          <span class="badge bg-success">₹{{ item.price | number:'1.2-2' }}</span>
+        </div>
+
+        <!-- Quantity Control -->
+        <div class="col-12 col-md-3 text-center">
+          <div class="quantity-control d-inline-flex align-items-center border rounded-pill px-2 py-1">
+            <button mat-icon-button color="primary" (click)="decreaseQuantity(item)">
+              <mat-icon>remove</mat-icon>
+            </button>
+
+            <span class="mx-2 fw-semibold">{{ item.quantityInCart }}</span>
+
+            <button mat-icon-button color="primary" (click)="increaseQuantity(item)">
+              <mat-icon>add</mat-icon>
+            </button>
+          </div>
+        </div>
+
+        <!-- Total Price -->
+        <div class="col-12 col-md-2 text-center">
+          <h5 class="fw-bold text-dark">
+            ₹{{ item.price * (item.quantityInCart || 1) | number:'1.2-2' }}
+          </h5>
+        </div>
+
+        <!-- Remove -->
+        <div class="col-12 col-md-1 text-center">
+          <button mat-icon-button class="text-danger" (click)="removeFromCart(item)" aria-label="Remove item">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+      </div>
+    </mat-card>
+
+    <!-- Cart Summary -->
+    <mat-card class="cart-summary shadow-sm p-4 rounded-3 mt-4">
+      <div class="row align-items-center">
+        <div class="col-md-6 mb-2 mb-md-0">
+          <button mat-raised-button color="warn" (click)="clearCart()">Clear Cart</button>
+        </div>
+        <div class="col-md-6 text-md-end text-center">
+          <h4 class="fw-bold mb-2">Total: ₹{{ totalPrice | number:'1.2-2' }}</h4>
+          <button mat-raised-button color="primary" class="fw-semibold"
+                  (click)="proceedToCheckout()">Proceed to Checkout</button>
+        </div>
+      </div>
+    </mat-card>
+  </div>
+</div>

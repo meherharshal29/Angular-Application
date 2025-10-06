@@ -1,0 +1,37 @@
+.cart-item {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  border: 1px solid #f0f0f0;
+}
+
+.product-img {
+  max-height: 100px;
+  width: auto;
+  object-fit: cover;
+}
+
+.quantity-control {
+  background-color: #f9f9f9;
+  mat-icon {
+    font-size: 18px;
+  }
+  span {
+    min-width: 30px;
+    text-align: center;
+  }
+}
+
+.cart-summary {
+  background-color: #fdfdfd;
+  border: 1px solid #eee;
+}
+
+button[mat-raised-button] {
+  border-radius: 25px;
+  padding: 8px 20px;
+}
+
+@media (max-width: 768px) {
+  .cart-item .row {
+    text-align: center;
+  }
+}

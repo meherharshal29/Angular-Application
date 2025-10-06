@@ -81,15 +81,13 @@
         </ul>
 
         <!-- Cart Icon -->
-        <div class="nav-item me-3 position-relative">
-          <a class="nav-link p-2" routerLink="/modules/admin/mainpanel/dashboard" aria-label="Shopping Cart"
-            (click)="closeMobileMenu()">
-            <i class="bi bi-cart fs-5"></i>
-            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-success"
-              *ngIf="cartItemCount > 0" style="font-size: 0.75rem;">
+        <div class="nav-item me-2 position-relative">
+          <a class="nav-link position-relative p-0 text-center" routerLink="/cart" (click)="closeMobileMenu()">
+            <span *ngIf="cartItemCount > 0" class="text-danger position-absolute fw-bolder w-100 mb-4 p-4"
+              style="top: 1px; font-size: 0.9rem;  border: 2px solid white;">
               {{ cartItemCount }}
-              <span class="visually-hidden">Cart items</span>
             </span>
+            <i class="bi bi-cart" style="font-size: 1.6rem; color: black;"></i>
           </a>
         </div>
 

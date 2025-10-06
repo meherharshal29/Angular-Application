@@ -1,0 +1,63 @@
+<div class="container mt-4" *ngIf="!isLoading && item">
+  <mat-card class="item-card shadow-lg">
+    <mat-card-header>
+      <mat-card-title class="item-title">{{ item.name }}</mat-card-title>
+      <mat-card-subtitle class="item-category p-2">{{ item.category }}</mat-card-subtitle>
+    </mat-card-header>
+
+    <div class="row g-4">
+      <!-- Image Section -->
+      <div class="col-md-6">
+        <div class="image-wrapper">
+          <img
+            [src]="item.imageUrl || fallbackImage"
+            [alt]="item.name"
+            class="img-fluid rounded"
+            (error)="handleImageError($event)"
+            aria-label="Item image"
+          />
+          <div class="discount-badge" *ngIf="item.discountPrice && calculateDiscount(item) > 0">
+            {{ calculateDiscount(item) }}% OFF
+          </div>
+        </div>
+      </div>
+
+      <!-- Details Section -->
+      <div class="col-md-6">
+        <mat-card-content>
+          <div class="price-section mb-3">
+            <span class="current-price text-success fw-bold">
+              ₹{{ item.price | number:'1.2-2' }}
+            </span>
+            <span *ngIf="item.discountPrice" class="original-price text-muted ms-2">
+              <s>₹{{ item.discountPrice | number:'1.2-2' }}</s>
+            </span>
+          </div>
+          <p><strong>Quantity:</strong> {{ item.quantity }} {{ item.quantityUnit }}</p>
+          <p><strong>Shop:</strong> {{ item.shopName }}</p>
+          <p><strong>Details:</strong> {{ item.details || 'No details available' }}</p>
+          <p><strong>Additional Details:</strong> {{ item.additionalDetails || 'No additional details' }}</p>
+        </mat-card-content>
+
+        <!-- Actions -->
+        <mat-card-actions class="d-flex align-items-center mt-3">
+          <button mat-raised-button color="primary" (click)="addToCart(item)" aria-label="Add to cart">
+            <mat-icon>add_shopping_cart</mat-icon> Add to Cart
+          </button>
+          <button mat-stroked-button color="accent" class="ms-2" (click)="buyNow(item)" aria-label="Buy now">
+            <mat-icon>flash_on</mat-icon> Buy Now
+          </button>
+          <button mat-stroked-button color="warn" class="ms-auto" (click)="goBack()" aria-label="Go back">
+            <mat-icon>arrow_back</mat-icon> Back
+          </button>
+        </mat-card-actions>
+      </div>
+    </div>
+  </mat-card>
+</div>
+
+<!-- <ng-template #loading>
+  <div class="text-center mt-5">
+    <mat-spinner diameter="50" aria-label="Loading item details"></mat-spinner>
+    <p class="mt-2">Loading item details...</p>
+  </ng-template> -->

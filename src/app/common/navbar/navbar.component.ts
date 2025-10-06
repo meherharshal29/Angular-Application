@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService, User } from '../../auth/service/auth.service';
+import { CartService } from '../../services/cart.service'; // Import CartService
 import { CommonModule } from '@angular/common';
 import { MaterialModule } from '../../shared/materials/material/material.module';
 import { RouterLink, RouterLinkActive } from '@angular/router';
@@ -19,19 +20,30 @@ export class NavbarComponent implements OnInit, OnDestroy {
   currentUser: User | null = null;
   private sub: Subscription = new Subscription();
   cartItemCount = 0;
-  isLoggingOut = false; // ✅ flag for spinner overlay + blur
+  isLoggingOut = false;
 
   constructor(
-    private authService: AuthService, 
+    private authService: AuthService,
+    private cartService: CartService, // Add CartService
     private router: Router,
     private spinner: NgxSpinnerService,
     private notificationS: NotificationService
   ) {}
 
   ngOnInit(): void {
-    this.sub = this.authService.currentUser$.subscribe(user => {
-      this.currentUser = user;
-    });
+    // Subscribe to user authentication status
+    this.sub.add(
+      this.authService.currentUser$.subscribe(user => {
+        this.currentUser = user;
+      })
+    );
+
+    // Subscribe to cart count updates
+    this.sub.add(
+      this.cartService.getCartCount().subscribe(count => {
+        this.cartItemCount = count;
+      })
+    );
   }
 
   closeMobileMenu(event?: Event): void {
@@ -42,7 +54,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
         bsCollapse.hide();
       }
       if (event) {
-        (event.target as HTMLElement).blur(); 
+        (event.target as HTMLElement).blur();
       }
     }
   }
@@ -52,16 +64,15 @@ export class NavbarComponent implements OnInit, OnDestroy {
   }
 
   logout(): void {
-    this.isLoggingOut = true;   // show overlay + blur
-    this.spinner.show();         // show spinner
+    this.isLoggingOut = true;
+    this.spinner.show();
 
     setTimeout(() => {
       this.authService.logout();
       this.router.navigate(['/auth/login']);
       this.notificationS.showNotification('Logged out successfully!', 'success');
-
-      this.spinner.hide();       // hide spinner
-      this.isLoggingOut = false; // hide overlay
+      this.spinner.hide();
+      this.isLoggingOut = false;
     }, 3000);
   }
 

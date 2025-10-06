@@ -6,6 +6,8 @@ import { authGuard } from './guard/auth.guard';
 import { VegetableComponent } from './components/vegetable/vegetable.component';
 import { FruitsComponent } from './components/fruits/fruits.component';
 import { ItemsComponent } from './components/items/items.component';
+import { ItemsDetailsComponent } from './components/items/items-details/items-details.component';
+import { CartComponent } from './components/cart/cart.component';
 
 export const routes: Routes = [
   { path: "", component: HomeComponent },
@@ -23,9 +25,13 @@ export const routes: Routes = [
       {
         path : 'items' ,
         component :ItemsComponent
-      }
+      },
+      { path: 'items/:id', component: ItemsDetailsComponent },
+
     ]
   },
+    { path: 'cart', component: CartComponent },
+
   {
     path: "modules",
     children: [
