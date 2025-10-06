@@ -6,28 +6,35 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class ItemsAddService {
+  private url = 'http://localhost:8080/api/items';
 
-  private url = "http://localhost:3000/Vegetables";
+  constructor(private http: HttpClient) {}
 
-  constructor(private http: HttpClient) { }
-
-  // 🔹 Get all items
   getItems(): Observable<any[]> {
     return this.http.get<any[]>(this.url);
   }
 
-  // 🔹 Add new item
-  addItem(item: any): Observable<any> {
-    return this.http.post<any>(this.url, item);
+  // ✅ Add new item (multipart form-data)
+  addItem(item: any, imageFile?: File): Observable<any> {
+    const formData = new FormData();
+    formData.append('item', new Blob([JSON.stringify(item)], { type: 'application/json' }));
+    if (imageFile) {
+      formData.append('image', imageFile);
+    }
+    return this.http.post<any>(this.url, formData);
   }
 
-  // 🔹 Update/Edit item by id
-  updateItem(id: number, updatedItem: any): Observable<any> {
-    return this.http.put<any>(`${this.url}/${id}`, updatedItem);
+  // ✅ Update item (multipart form-data)
+  updateItem(id: number, item: any, imageFile?: File): Observable<any> {
+    const formData = new FormData();
+    formData.append('item', new Blob([JSON.stringify(item)], { type: 'application/json' }));
+    if (imageFile) {
+      formData.append('image', imageFile);
+    }
+    return this.http.put<any>(`${this.url}/${id}`, formData);
   }
 
-  // 🔹 Delete item by id
   deleteItem(id: number): Observable<any> {
-    return this.http.delete<any>(`${this.url}/${id}`);
+    return this.http.delete(`${this.url}/${id}`);
   }
 }

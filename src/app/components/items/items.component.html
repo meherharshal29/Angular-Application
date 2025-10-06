@@ -1,0 +1,45 @@
+<div class="container-fluid">
+  <div class="row g-4 p-4">
+    <div class="col-12 col-sm-6 col-md-4 col-lg-3" *ngFor="let item of items">
+      <mat-card class="h-100 shadow-sm">
+
+        <!-- Image -->
+        <div class="card-image-wrapper">
+          <img mat-card-image [src]="item.imageUrl" [alt]="item.name"  />
+        </div>
+
+        <!-- Name -->
+        <mat-card-header>
+          <mat-card-title>{{ item.name }}</mat-card-title>
+        </mat-card-header>
+
+        <!-- Price -->
+        <mat-card-content class="text-start">
+          <div class="price-section">
+            <span class="current-price text-success fw-medium">
+              ₹{{ item.price }} <!-- Discounted Price -->
+            </span>
+            <span *ngIf="item.originalPrice" class="original-price text-muted">
+              ₹{{ item.originalPrice }}
+            </span>
+            <span *ngIf="item.originalPrice" class="discount text-danger">
+              ({{ item.price }}% off)
+            </span>
+          </div>
+        </mat-card-content>
+
+        <!-- Actions -->
+        <mat-card-actions class="d-flex align-items-center">
+          <button mat-icon-button color="warn" class="text-warning" >
+            <mat-icon>add_shopping_cart</mat-icon>
+          </button>
+          <button mat-stroked-button color="primary" class="ms-auto" >
+            <mat-icon>flash_on</mat-icon>
+            Buy Now
+          </button>
+        </mat-card-actions>
+
+      </mat-card>
+    </div>
+  </div>
+</div>

@@ -5,6 +5,7 @@ import { ProfileComponent } from './components/profile/profile.component';
 import { authGuard } from './guard/auth.guard';
 import { VegetableComponent } from './components/vegetable/vegetable.component';
 import { FruitsComponent } from './components/fruits/fruits.component';
+import { ItemsComponent } from './components/items/items.component';
 
 export const routes: Routes = [
   { path: "", component: HomeComponent },
@@ -18,6 +19,10 @@ export const routes: Routes = [
       },
       {
         path :'fruits' , component:FruitsComponent , canActivate:[authGuard]
+      },
+      {
+        path : 'items' ,
+        component :ItemsComponent
       }
     ]
   },
