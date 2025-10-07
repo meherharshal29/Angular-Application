@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { MaterialModule } from '../../../../shared/materials/material/material.module';  // Adjust path as needed
+import { MaterialModule } from '../../../../shared/materials/material/material.module';
 import { ItemsAddService } from '../../../services/items/items-add.service';
 import { ToastrService } from 'ngx-toastr';
 
 @Component({
-  selector: 'app-view-items',  
+  selector: 'app-view-items',
   standalone: true,
   imports: [CommonModule, MaterialModule],
   templateUrl: './view-items.component.html',
@@ -14,6 +14,7 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class ViewItemsComponent implements OnInit {
   items: any[] = [];
+  loading: boolean = false;
 
   constructor(
     private itemsService: ItemsAddService,
@@ -26,31 +27,42 @@ export class ViewItemsComponent implements OnInit {
   }
 
   loadItems(): void {
+    this.loading = true;
     this.itemsService.getItems().subscribe({
-      next: (data) => this.items = data,
-      error: () => this.toastr.error('Failed to load items', 'Error', { timeOut: 3000 })
+      next: (data) => {
+        this.items = data;
+        this.loading = false;
+      },
+      error: (err) => {
+        this.toastr.error(err.message || 'Failed to load items', 'Error', { timeOut: 3000 });
+        this.loading = false;
+      }
     });
   }
 
-  onEdit(item: any): void {
-    // Navigate to add/edit route with item ID (adjust route as per your setup)
-    this.router.navigate(['/modules/admin/vegetable/add'], { queryParams: { editId: item.id } });
-  }
+onEdit(item: any): void {
+  if (!item?.id) return;
+  this.router.navigate(['/modules/admin/vegetable/edit', item.id]);
+}
 
-  onDelete(id: number): void {
-    if (confirm('Are you sure you want to delete this item?')) {
-      this.itemsService.deleteItem(id).subscribe({
+
+  onDelete(item: any): void {
+    if (!item || !item.id) return;
+
+    if (confirm(`Are you sure you want to delete "${item.name}"?`)) {
+      this.itemsService.deleteItem(item.id).subscribe({
         next: () => {
-          this.toastr.warning('Item deleted!', 'Deleted', { timeOut: 3000 });
-          this.loadItems();  
+          this.toastr.warning(`"${item.name}" deleted successfully!`, 'Deleted', { timeOut: 3000 });
+          this.items = this.items.filter(i => i.id !== item.id); // Remove deleted item from list
         },
-        error: () => this.toastr.error('Failed to delete item', 'Error', { timeOut: 3000 })
+        error: (err) => {
+          this.toastr.error(err.message || 'Failed to delete item', 'Error', { timeOut: 3000 });
+        }
       });
     }
   }
 
   onImageError(event: any): void {
-    // Handle broken images gracefully
     event.target.style.display = 'none';
     const fallback = event.target.parentNode.querySelector('span');
     if (fallback) fallback.style.display = 'block';

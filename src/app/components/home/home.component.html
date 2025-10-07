@@ -1,5 +1,7 @@
-<!-- home.component.html -->
+<ngx-loading [show]="loading" [config]="loaderConfig"></ngx-loading>
+
 <div class="container-fluid p-0 m-0 h-auto">
+  
   <section class="hero-section bg-light py-5">
     <div class="container">
       <div class="row align-items-center">
@@ -34,7 +36,7 @@
       </div>
       <div class="row g-4">
         <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12">
-          <mat-card class="h-100 text-center shadow-sm border-0 clickable-card" (click)="goToFruitsProducts('fruits')">
+          <mat-card class="h-100 text-center shadow-sm border-0 clickable-card" (click)="goToProducts('fruits')">
             <img mat-card-image
               src="https://tiimg.tistatic.com/fp/1/008/263/99-9-pure-fresh-a-grade-indian-origin-common-cultivated-sweet-organic-fruits-682.jpg"
               alt="Fresh Fruits" class="rounded-top" style="height: 230px; object-fit: cover;">
@@ -42,14 +44,14 @@
               <h5 class="card-title fw-bold">Fresh Fruits</h5>
             </mat-card-content>
             <mat-card-actions class="justify-content-center pb-3">
-              <button mat-button color="primary" (click)="goToFruitsProducts('fruits'); $event.stopPropagation()">Shop
+              <button mat-button color="primary" (click)="goToProducts('fruits'); $event.stopPropagation()">Shop
                 Now</button>
             </mat-card-actions>
           </mat-card>
         </div>
 
         <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12">
-          <mat-card class="h-100 text-center shadow-sm border-0" (click)="goToVegetablesProducts('vegetables')">
+          <mat-card class="h-100 text-center shadow-sm border-0" (click)="goToProducts('vegetables')">
             <img mat-card-image
               src="https://media.istockphoto.com/id/1203599923/photo/food-background-with-assortment-of-fresh-organic-vegetables.jpg?s=612x612&w=0&k=20&c=DZy1JMfUBkllwiq1Fm_LXtxA4DMDnExuF40jD8u9Z0Q="
               alt="Organic Vegetables" class="rounded-top" style="height: 230px; object-fit: cover;">
@@ -57,7 +59,7 @@
               <h5 class="card-title fw-bold">Organic Vegetables</h5>
             </mat-card-content>
             <mat-card-actions class="justify-content-center pb-3">
-              <button mat-button color="primary" (click)="goToVegetablesProducts('vegetables')">Shop Now </button>
+              <button mat-button color="primary" (click)="goToProducts('vegetables')">Shop Now </button>
             </mat-card-actions>
           </mat-card>
         </div>

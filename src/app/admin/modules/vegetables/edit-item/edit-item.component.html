@@ -1,12 +1,13 @@
 <div class="container mt-4">
   <form [formGroup]="itemForm" (ngSubmit)="onSubmit()" class="shadow-lg p-4 m-2">
-    <h2 class="mb-4">{{ editingItemId ? 'Edit Item' : 'Add Item' }}</h2>
+    <h2 class="mb-4">Edit Item</h2>
     <div class="row g-3">
+
       <!-- Name -->
       <div class="col-md-6">
         <mat-form-field appearance="outline" class="w-100">
           <mat-label>Name</mat-label>
-          <input matInput formControlName="name" placeholder="e.g., Apple">
+          <input matInput formControlName="name">
           <mat-error *ngIf="itemForm.get('name')?.invalid && itemForm.get('name')?.touched">
             Name is required and must be at least 2 characters.
           </mat-error>
@@ -22,9 +23,6 @@
             <mat-option value="Fruit">Fruit</mat-option>
             <mat-option value="Organic">Organic</mat-option>
           </mat-select>
-          <mat-error *ngIf="itemForm.get('category')?.invalid && itemForm.get('category')?.touched">
-            Category is required
-          </mat-error>
         </mat-form-field>
       </div>
 
@@ -32,21 +30,15 @@
       <div class="col-md-6">
         <mat-form-field appearance="outline" class="w-100">
           <mat-label>Price ($)</mat-label>
-          <input matInput type="number" step="0.01" formControlName="price" placeholder="e.g., 2.99">
-          <mat-error *ngIf="itemForm.get('price')?.invalid && itemForm.get('price')?.touched">
-            Price must be greater than 0.
-          </mat-error>
+          <input matInput type="number" step="0.01" formControlName="price">
         </mat-form-field>
       </div>
 
-      <!-- Discount -->
+      <!-- Discount Price -->
       <div class="col-md-6">
         <mat-form-field appearance="outline" class="w-100">
           <mat-label>Discount Price ($)</mat-label>
-          <input matInput type="number" step="0.01" formControlName="discountPrice" placeholder="Optional">
-          <mat-error *ngIf="itemForm.get('discountPrice')?.invalid && itemForm.get('discountPrice')?.touched">
-            Discount price must be a positive number.
-          </mat-error>
+          <input matInput type="number" step="0.01" formControlName="discountPrice">
         </mat-form-field>
       </div>
 
@@ -54,10 +46,7 @@
       <div class="col-md-6">
         <mat-form-field appearance="outline" class="w-100">
           <mat-label>Quantity</mat-label>
-          <input matInput type="number" step="0.01" formControlName="quantity" placeholder="e.g., 1">
-          <mat-error *ngIf="itemForm.get('quantity')?.invalid && itemForm.get('quantity')?.touched">
-            Quantity must be at least 0.01.
-          </mat-error>
+          <input matInput type="number" step="0.01" formControlName="quantity">
         </mat-form-field>
       </div>
 
@@ -70,9 +59,6 @@
             <mat-option value="1 kg">1 kg</mat-option>
             <mat-option value="2 kg">2 kg</mat-option>
           </mat-select>
-          <mat-error *ngIf="itemForm.get('quantityUnit')?.invalid && itemForm.get('quantityUnit')?.touched">
-            Quantity unit is required
-          </mat-error>
         </mat-form-field>
       </div>
 
@@ -80,36 +66,24 @@
       <div class="col-md-6">
         <mat-form-field appearance="outline" class="w-100">
           <mat-label>Shop Name</mat-label>
-          <input matInput formControlName="shopName" placeholder="e.g., Green Market">
-          <mat-error *ngIf="itemForm.get('shopName')?.invalid && itemForm.get('shopName')?.touched">
-            Shop name is required and must be at least 2 characters.
-          </mat-error>
+          <input matInput formControlName="shopName">
         </mat-form-field>
       </div>
 
-      <!-- Image URL / File Upload -->
+      <!-- Image URL/File -->
       <div class="col-md-6">
         <mat-form-field appearance="outline" class="w-100">
-          <mat-label>Image URL (or upload file below)</mat-label>
-          <input matInput formControlName="imageUrl" placeholder="e.g., https://example.com/image.jpg">
+          <mat-label>Image URL</mat-label>
+          <input matInput formControlName="imageUrl">
         </mat-form-field>
 
         <div class="mt-2">
-          <label for="fileInput" class="form-label">Or choose a file:</label>
-          <input
-            type="file"
-            id="fileInput"
-            class="form-control"
-            (change)="onFileSelected($event)"
-            accept="image/*"
-            #fileInput
-          />
-          <mat-error *ngIf="fileError" class="text-danger">{{ fileError }}</mat-error>
+          <label for="fileInput">Choose a file:</label>
+          <input type="file" id="fileInput" class="form-control" (change)="onFileSelected($event)">
         </div>
 
-        <!-- Image Preview -->
         <div *ngIf="previewImageUrl" class="mt-2">
-          <img [src]="previewImageUrl" alt="Preview" style="max-height: 100px; max-width: 100px; object-fit: cover; border: 1px solid #ccc;">
+          <img [src]="previewImageUrl" alt="Preview" style="max-width: 100px; max-height: 100px; object-fit: cover; border: 1px solid #ccc;">
         </div>
       </div>
 
@@ -132,13 +106,12 @@
       <!-- Submit -->
       <div class="col-12 d-flex gap-2 justify-content-end">
         <button mat-flat-button color="primary" type="submit" [disabled]="itemForm.invalid || isSubmitting">
-          {{ editingItemId ? 'Update' : 'Save' }}
+          Update
         </button>
-        <button mat-stroked-button type="button" (click)="onCancelEdit()" [disabled]="isSubmitting">
-          {{ editingItemId ? 'Cancel' : 'Reset' }}
+        <button mat-stroked-button type="button" (click)="onCancel()" [disabled]="isSubmitting">
+          Cancel
         </button>
       </div>
     </div>
   </form>
-
 </div>

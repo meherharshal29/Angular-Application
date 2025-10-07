@@ -26,6 +26,9 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; min-height:
   100% { opacity: 0; }
 }
  // Spinner 
+ .custom-spinner {
+  color: rgb(70, 225, 70);
+ }
 .spinner-overlay {
   position: fixed;
   top: 0;
@@ -41,8 +44,14 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; min-height:
   animation: fadeIn 0.3s ease-in-out;
 }
 
-
 @keyframes fadeIn {
   from { opacity: 0; }
   to { opacity: 1; }
+}
+
+// ngx loader
+.content-wrapper.blur-background {
+  filter: blur(5px);
+  pointer-events: none; 
+  transition: filter 0.3s ease;
 }

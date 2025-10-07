@@ -1,6 +1,4 @@
-<!-- saidbar.component.html -->
 <mat-sidenav-container class="sidenav-container" autosize>
-
   <!-- Sidebar -->
   <mat-sidenav #sidenav class="sidenav bg-white shadow-sm" [mode]="isMobile ? 'over' : 'side'" [opened]="!isMobile">
     <!-- Header -->
@@ -14,7 +12,6 @@
     </div>
 
     <mat-accordion multi class="mt-3">
-
       <!-- Dashboard -->
       <button mat-button class="w-100 mb-2" routerLink="/modules/admin/mainpanel/dashboard" (click)="closeMobileMenu()">
         <mat-icon>dashboard</mat-icon> Dashboard
@@ -81,25 +78,21 @@
 
       <!-- Logout -->
       <div class="w-100 d-flex justify-content-center mt-4" *ngIf="isLoggedIn">
-      <button 
-        mat-flat-button 
-        color="warn" 
-        class="w-52" 
-        (click)="adminS.logout()"  
-        (click)="closeMobileMenu()"
-      >
-        <mat-icon class="me-2">logout</mat-icon>
-        Logout
-      </button>
-    </div>
-
-
+        <button 
+          mat-flat-button 
+          color="warn" 
+          class="w-52" 
+          (click)="logout()"
+        >
+          <mat-icon class="me-2">logout</mat-icon>
+          Logout
+        </button>
+      </div>
     </mat-accordion>
   </mat-sidenav>
 
   <!-- Main content -->
   <mat-sidenav-content class="p-3 bg-light">
-    <!-- Top navbar for mobile -->
     <nav class="navbar navbar-light bg-white shadow-sm mb-3 d-md-none">
       <button class="btn btn-outline-primary" (click)="sidenav.toggle()">
         <mat-icon>menu</mat-icon>
@@ -109,5 +102,8 @@
 
     <router-outlet></router-outlet>
   </mat-sidenav-content>
-
 </mat-sidenav-container>
+
+<div *ngIf="showSpinner" class="spinner-overlay">
+  <mat-spinner diameter="80" strokeWidth="5" class="custom-spinner"></mat-spinner>
+</div>

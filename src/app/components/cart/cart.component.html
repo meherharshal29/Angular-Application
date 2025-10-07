@@ -1,23 +1,40 @@
-<div class="container py-4 cart-container p-0 m-auto">
+<ngx-loading
+  [show]="loading"
+  [config]="{
+    animationType: 'fading-circle',
+    backdropBackgroundColour: 'rgba(255, 255, 255, 0.3)',
+    backdropBorderRadius: '8px',
+    backdropBorder: 'none',
+    primaryColour: '#4caf50',
+    secondaryColour: '#8bc34a',
+    tertiaryColour: '#c8e6c9'
+  }">
+</ngx-loading>
+
+<div class="container py-4 cart-container p-0 m-auto content-wrapper" [class.blur-background]="loading">
   <h4 class="mb-4 fw-semibold text-success">
     Shopping Cart <span class="text-muted">({{ cartCount }})</span>
   </h4>
 
+  <!-- Not Logged In -->
+  <div *ngIf="!isLoggedIn" class="alert alert-warning shadow-sm">
+    🔒 Please <a routerLink="/auth/login" class="fw-bold">log in</a> to view your cart.
+  </div>
+
   <!-- Empty Cart -->
-  <div *ngIf="cartItems.length === 0" class="alert alert-info shadow-sm">
+  <div *ngIf="isLoggedIn && cartItems.length === 0" class="alert alert-info shadow-sm">
     🛒 Your cart is empty. <a routerLink="/products/items" class="fw-bold">Continue shopping</a>
   </div>
 
   <!-- Cart Items -->
-  <div *ngIf="cartItems.length > 0">
+  <div *ngIf="isLoggedIn && cartItems.length > 0">
     <mat-card class="cart-item shadow-sm mb-3 rounded-3" *ngFor="let item of cartItems">
       <div class="row align-items-center g-3 p-2">
-        
         <!-- Image -->
-        <div class="col-12 col-md-2 text-center">
+        <div class="col-12 col-md-2 text-start">
           <img [src]="item.imageUrl || 'https://rkmrajahmundry.org/wp-content/uploads/2020/04/default-placeholder.png'"
                [alt]="item.name"
-               class="img-fluid rounded-3 product-img">
+               class="img-fluid rounded-3 product-img w-100 h-50">
         </div>
 
         <!-- Details -->
@@ -33,9 +50,7 @@
             <button mat-icon-button color="primary" (click)="decreaseQuantity(item)">
               <mat-icon>remove</mat-icon>
             </button>
-
             <span class="mx-2 fw-semibold">{{ item.quantityInCart }}</span>
-
             <button mat-icon-button color="primary" (click)="increaseQuantity(item)">
               <mat-icon>add</mat-icon>
             </button>
@@ -62,12 +77,18 @@
     <mat-card class="cart-summary shadow-sm p-4 rounded-3 mt-4">
       <div class="row align-items-center">
         <div class="col-md-6 mb-2 mb-md-0">
-          <button mat-raised-button color="warn" (click)="clearCart()">Clear Cart</button>
+          <button mat-stroked-button class="text-danger me-2" (click)="clearCart()">
+            <i class="bi bi-cart-x-fill fs-6"></i> Clear Cart
+          </button>
+          <button mat-stroked-button class="text-success" routerLink="/products/items">
+            <i class="bi bi-bag-plus fs-6 me-2"></i>More Shopping
+          </button>
         </div>
         <div class="col-md-6 text-md-end text-center">
-          <h4 class="fw-bold mb-2">Total: ₹{{ totalPrice | number:'1.2-2' }}</h4>
-          <button mat-raised-button color="primary" class="fw-semibold"
-                  (click)="proceedToCheckout()">Proceed to Checkout</button>
+          <h6 class="fw-bold mb-2 fs-5 me-4">Total: ₹{{ totalPrice | number:'1.2-2' }}</h6>
+          <button mat-stroked-button color="primary" class="fw-medium" (click)="proceedToCheckout()">
+            <i class="bi bi-wallet2 me-1"></i> Proceed to Checkout
+          </button>
         </div>
       </div>
     </mat-card>

@@ -1,6 +1,7 @@
 import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { Router } from '@angular/router';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 interface RegisterUser {
   email: string;
@@ -13,10 +14,15 @@ interface RegisterUser {
 })
 export class AdminService {
   private isBrowser: boolean;
+  private isLoggedInSubject = new BehaviorSubject<boolean>(false);
+  isLoggedIn$: Observable<boolean> = this.isLoggedInSubject.asObservable();
 
   constructor(@Inject(PLATFORM_ID) private platformId: Object, private router: Router) {
     this.isBrowser = isPlatformBrowser(this.platformId);
-    this.addDefaultAdmin();
+    if (this.isBrowser) {
+      this.addDefaultAdmin();
+      this.checkLoginStatus(); 
+    }
   }
 
   // Add default admin (only if not present in localStorage)
@@ -49,6 +55,7 @@ export class AdminService {
     const admin = admins.find(u => u.email === email && u.password === password);
     if (admin) {
       localStorage.setItem('currentAdmin', JSON.stringify(admin));
+      this.isLoggedInSubject.next(true); // Notify login status change
       return true;
     }
     return false;
@@ -56,8 +63,10 @@ export class AdminService {
 
   // Admin logout
   logout(): void {
+    if (!this.isBrowser) return;
     localStorage.removeItem('currentAdmin');
-    this.router.navigate(['/modules/admin/admin']); // redirect to admin login page
+    this.isLoggedInSubject.next(false); // Notify login status change
+    this.router.navigate(['/modules/admin/admin']); // Redirect to admin login page
   }
 
   // Check if admin is logged in
@@ -72,5 +81,12 @@ export class AdminService {
     if (!this.isBrowser) return null;
     const currentAdmin = localStorage.getItem('currentAdmin');
     return currentAdmin ? JSON.parse(currentAdmin) : null;
+  }
+
+  // Check login status and update BehaviorSubject
+  checkLoginStatus(): void {
+    if (!this.isBrowser) return;
+    const isLoggedIn = !!localStorage.getItem('currentAdmin');
+    this.isLoggedInSubject.next(isLoggedIn);
   }
 }

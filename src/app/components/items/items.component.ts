@@ -5,7 +5,14 @@ import { MaterialModule } from '../../shared/materials/material/material.module'
 import { ItemsAddService } from '../../admin/services/items/items-add.service';
 import { Router } from '@angular/router';
 import { CartService } from '../../services/cart.service';
-
+interface Item {
+  id: number;
+  name: string;
+  details: string;
+  price?: number;
+  discountPrice?: number;
+  imageUrl?: string;
+}
 @Component({
   selector: 'app-items',
   standalone: true,
@@ -23,7 +30,7 @@ export class ItemsComponent implements OnInit {
     private toastr: ToastrService,
     private router: Router,
     private cartService: CartService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.loadItems();
@@ -48,7 +55,16 @@ export class ItemsComponent implements OnInit {
       }
     });
   }
+  calculateDiscount(item: any): number {
+    const originalPrice = parseFloat(item.price);
+    const discountedPrice = parseFloat(item.discountPrice);
 
+    if (originalPrice && discountedPrice && originalPrice > discountedPrice) {
+      const discount = ((originalPrice - discountedPrice) / originalPrice) * 100;
+      return Math.round(discount);
+    }
+    return 0;
+  }
   addToCart(item: any): void {
     this.cartService.addToCart(item);
     this.toastr.success(`${item.name} added to cart!`, 'Success', { timeOut: 1000 });
@@ -69,5 +85,9 @@ export class ItemsComponent implements OnInit {
     if (currentQty > 0) {
       this.cartService.updateQuantity(item.id, currentQty - 1);
     }
+  }
+  buyNow(item: Item): void {
+    this.addToCart(item);
+    this.router.navigate(['/checkout']);
   }
 }

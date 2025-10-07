@@ -105,3 +105,9 @@ a {
 .clickable-card:hover {
   transform: translateY(-5px);
 }
+
+.blur-background {
+  filter: blur(2px);
+  pointer-events: none; 
+  transition: filter 0.3s ease;
+}

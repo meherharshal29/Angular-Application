@@ -25,13 +25,10 @@
   border: 1px solid #eee;
 }
 
-button[mat-raised-button] {
-  border-radius: 25px;
-  padding: 8px 20px;
-}
 
 @media (max-width: 768px) {
   .cart-item .row {
     text-align: center;
   }
 }
+
