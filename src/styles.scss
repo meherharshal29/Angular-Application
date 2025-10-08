@@ -55,3 +55,8 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; min-height:
   pointer-events: none; 
   transition: filter 0.3s ease;
 }
+::ng-deep ngx-loading {
+  z-index: 1050; 
+  width: 100vw;
+  height: 100vh;
+}

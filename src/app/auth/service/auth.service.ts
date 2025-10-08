@@ -17,6 +17,7 @@ interface Item {
   providedIn: 'root'
 })
 export class AuthService {
+
   private storageKey = 'users';
   private currentUserKey = 'currentUser';
   private itemsKeyPrefix = 'items_';
@@ -57,6 +58,10 @@ export class AuthService {
       localStorage.removeItem(this.currentUserKey);
     }
     this.currentUserSubject.next(null);
+  }
+
+  isLoggedIn(): boolean {
+    return !!this.getCurrentUser();
   }
 
   getCurrentUser(): User | null {

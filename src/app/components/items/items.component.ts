@@ -5,6 +5,7 @@ import { MaterialModule } from '../../shared/materials/material/material.module'
 import { ItemsAddService } from '../../admin/services/items/items-add.service';
 import { Router } from '@angular/router';
 import { CartService } from '../../services/cart.service';
+import { NgxLoadingModule } from 'ngx-loading';
 interface Item {
   id: number;
   name: string;
@@ -16,7 +17,7 @@ interface Item {
 @Component({
   selector: 'app-items',
   standalone: true,
-  imports: [CommonModule, MaterialModule],
+  imports: [CommonModule, MaterialModule,NgxLoadingModule],
   templateUrl: './items.component.html',
   styleUrls: ['./items.component.scss']
 })
@@ -24,6 +25,7 @@ export class ItemsComponent implements OnInit {
 
   items: any[] = [];
   isLoading = true;
+  isNgxLoading:boolean = false;
 
   constructor(
     private itemService: ItemsAddService,
@@ -36,8 +38,12 @@ export class ItemsComponent implements OnInit {
     this.loadItems();
   }
 
-  viewDetails(itemId: number): void {
-    this.router.navigate(['/products/items', itemId]);
+ viewDetails(itemId: number): void {
+    this.isNgxLoading = true;
+    setTimeout(() => {
+      this.router.navigate(['/products/items', itemId]);
+      this.isNgxLoading = false;
+    }, 500);
   }
 
   loadItems(): void {
