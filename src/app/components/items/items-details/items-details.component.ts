@@ -9,7 +9,6 @@ import { MaterialModule } from '../../../shared/materials/material/material.modu
 import { FormsModule, ReactiveFormsModule, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { NgxLoadingModule } from 'ngx-loading';
-import { WordLimitPipe } from '../../../pipe/word-limit-pipe.pipe';
 import { AdminRoutingModule } from '../../../admin/admin-routing.module';
 
 @Component({
@@ -29,8 +28,8 @@ export class ItemsDetailsComponent implements OnInit {
   feedbacks: Feedback[] = [];
   feedbackForm: FormGroup;
   fallbackImage = 'https://media.istockphoto.com/id/2173059563/vector/coming-soon-image-on-white-background-no-photo-available.jpg?s=612x612&w=0&k=20&c=v0a_B58wPFNDPULSiw_BmPyhSNCyrP_d17i2BPPyDTk=';
-    showFullDetails = false;
-     showAllFeedbacks = false;
+  showFullDetails = false;
+  showAllFeedbacks = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -67,14 +66,14 @@ export class ItemsDetailsComponent implements OnInit {
     });
   }
 
-    toggleDetails() {
-      this.showFullDetails = !this.showFullDetails;
-    }
+  toggleDetails() {
+    this.showFullDetails = !this.showFullDetails;
+  }
 
-// Toggle function
-toggleAllFeedbacks() {
-  this.showAllFeedbacks = !this.showAllFeedbacks;
-}
+  // Toggle function
+  toggleAllFeedbacks() {
+    this.showAllFeedbacks = !this.showAllFeedbacks;
+  }
   loadItem(id: number): void {
     if (isPlatformBrowser(this.platformId)) {
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -110,7 +109,7 @@ toggleAllFeedbacks() {
           ...f,
           fullName: f.fullName || 'Anonymous',
           createdAt: new Date(f.createdAt),
-          showFullText: false 
+          showFullText: false
 
         }));
       },
@@ -138,7 +137,7 @@ toggleAllFeedbacks() {
 
     const feedback: Feedback = {
       itemId: this.item.id.toString(),
-      fullName: this.currentUser?.fullName || 'Anonymous', 
+      fullName: this.currentUser?.fullName || 'Anonymous',
       email: this.currentUser?.email || 'guest@example.com',
       rating: this.feedbackForm.get('rating')?.value,
       feedbackText: this.feedbackForm.get('feedbackText')?.value,
@@ -190,6 +189,10 @@ toggleAllFeedbacks() {
   }
 
   goBack(): void {
-    this.router.navigate(['/products/items']);
+    this.isNgxLoading = true;
+    setTimeout(() => {
+      this.router.navigate(['/products/items']);
+      this.isNgxLoading = false;
+    }, 500)
   }
 }

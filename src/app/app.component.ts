@@ -54,21 +54,21 @@ export class AppComponent implements OnInit, OnDestroy {
       }
     });
 
-    if (isPlatformBrowser(this.platformId)) {
-      setTimeout(() => {
-        const dialogRef = this.dialog.open(DialogPopupComponent, {
-          width: '400px',
-          data: { message: 'Shop Organic Vegetables and Fruits' },
-          disableClose: false,
-          autoFocus: true,
-          panelClass: 'custom-dialog'
-        });
+    // if (isPlatformBrowser(this.platformId)) {
+    //   setTimeout(() => {
+    //     const dialogRef = this.dialog.open(DialogPopupComponent, {
+    //       width: '400px',
+    //       data: { message: 'Shop Organic Vegetables and Fruits' },
+    //       disableClose: false,
+    //       autoFocus: true,
+    //       panelClass: 'custom-dialog'
+    //     });
 
-        setTimeout(() => {
-          dialogRef.close();
-        }, 3000); 
-      }, 5000); 
-    }
+    //     setTimeout(() => {
+    //       dialogRef.close();
+    //     }, 3000); 
+    //   }, 5000); 
+    // }
   }
 
   ngOnDestroy(): void {

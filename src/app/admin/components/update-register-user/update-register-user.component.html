@@ -1,0 +1,25 @@
+<h2 mat-dialog-title>Edit User</h2>
+
+<mat-dialog-content>
+  <mat-form-field appearance="outline" class="w-100 mb-3">
+    <mat-label>Full Name</mat-label>
+    <input matInput [(ngModel)]="user.fullName">
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="w-100 mb-3">
+    <mat-label>Email</mat-label>
+    <input matInput [(ngModel)]="user.email">
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="w-100 mb-3">
+    <mat-label>Password</mat-label>
+    <input matInput type="text" [(ngModel)]="user.password">
+  </mat-form-field>
+
+  <mat-checkbox [(ngModel)]="user.isActive" [disabled]="true">Active</mat-checkbox>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-stroked-button color="warn" (click)="onCancel()">Cancel</button>
+  <button mat-flat-button color="primary" (click)="onSave()">Save</button>
+</mat-dialog-actions>

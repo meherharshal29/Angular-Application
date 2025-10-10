@@ -1,0 +1,44 @@
+<div class="filter-container">
+  <h2 class="filter-title">Filters</h2>
+
+  <!-- Search Input -->
+  <div class="filter-group">
+    <label for="search" class="filter-label">Search</label>
+    <input
+      type="text"
+      id="search"
+      [(ngModel)]="searchTerm"
+      (ngModelChange)="onSearchChange()"
+      placeholder="Search products..."
+      class="filter-input"
+    />
+  </div>
+
+  <!-- Category Dropdown -->
+  <div class="filter-group">
+    <label for="category" class="filter-label">Category</label>
+    <select
+      id="category"
+      [(ngModel)]="category"
+      (ngModelChange)="onCategoryChange()"
+      class="filter-select"
+    >
+      <option *ngFor="let cat of categories" [value]="cat">{{ cat }}</option>
+    </select>
+  </div>
+
+  <!-- Price Range Slider -->
+  <div class="filter-group">
+    <label for="price" class="filter-label">Price Range: $0 - ${{ priceRange[1] }}</label>
+    <input
+      type="range"
+      id="price"
+      min="0"
+      max="1000"
+      step="10"
+      [(ngModel)]="priceRange[1]"
+      (ngModelChange)="onPriceChange()"
+      class="filter-slider"
+    />
+  </div>
+</div>

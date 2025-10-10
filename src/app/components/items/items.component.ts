@@ -17,7 +17,8 @@ interface Item {
 @Component({
   selector: 'app-items',
   standalone: true,
-  imports: [CommonModule, MaterialModule,NgxLoadingModule],
+  imports: [CommonModule, MaterialModule,NgxLoadingModule,
+],
   templateUrl: './items.component.html',
   styleUrls: ['./items.component.scss']
 })

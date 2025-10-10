@@ -1,0 +1,38 @@
+<div class="container-fluid">
+  <h2 class="mb-4 text-start">Registered Users</h2>
+
+  <div class="row g-4 py-2" *ngIf="users.length > 0; else noData">
+    <div class="col-md-4 col-sm-6" *ngFor="let user of users">
+      <mat-card class="user-card shadow-sm p-2 m-2">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <h4 class="mb-0">{{ user.fullName }}</h4>
+          <mat-icon class="text-primary">person</mat-icon>
+        </div>
+
+        <p><strong>Email:</strong> {{ user.email }}</p>
+        <p><strong>Password:</strong> {{ user.password }}</p>
+        <p><strong>Status:</strong> 
+          <span [ngClass]="isActiveUser(user) ? 'text-success' : 'text-danger'">
+            {{ isActiveUser(user) ? 'Active' : 'Inactive' }}
+          </span>
+        </p>
+
+        <div class="d-flex justify-content-end mt-3">
+          <button mat-icon-button class="text-secondary" (click)="onEdit(user)">
+            <mat-icon>edit</mat-icon> 
+          </button>
+          <button mat-icon-button class="text-danger" (click)="openDeleteDialog(user)">
+            <mat-icon>delete</mat-icon> 
+          </button>
+
+        </div>
+      </mat-card>
+    </div>
+  </div>
+
+  <ng-template #noData>
+    <div class="text-center text-muted mt-5">
+      <mat-icon>info</mat-icon> No registered users found.
+    </div>
+  </ng-template>
+</div>

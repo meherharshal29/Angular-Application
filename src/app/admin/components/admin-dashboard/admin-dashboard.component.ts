@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { MatButton } from "@angular/material/button";
 import { MaterialModule } from '../../../shared/materials/material/material.module';
 import { CommonModule } from '@angular/common';
@@ -13,14 +13,15 @@ interface RegisterUser {
 
 @Component({
   selector: 'app-admin-dashboard',
-  imports: [MaterialModule,CommonModule,ReactiveFormsModule],
-  templateUrl:'./admin-dashboard.component.html',
+  imports: [MaterialModule, CommonModule, ReactiveFormsModule, RouterModule],
+  templateUrl: './admin-dashboard.component.html',
   styleUrls: ['./admin-dashboard.component.scss']
 })
 export class AdminDashboardComponent implements OnInit {
+
   currentUser: RegisterUser | null = null;
 
-  constructor(private router: Router) {}
+  constructor(private router: Router) { }
 
   ngOnInit(): void {
     const currentUserStr = localStorage.getItem('currentAdmin');
@@ -38,6 +39,10 @@ export class AdminDashboardComponent implements OnInit {
     }
   }
 
+  registerUser() {
+    this.router.navigate(['/modules/admin/mainpanel/register-user'])
+  }
+  
   logout(): void {
     localStorage.removeItem('currentUser');
     this.router.navigate(['/modules/admin/admin']);

@@ -1,0 +1,25 @@
+  .payment-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 1050;
+  }
+
+  .mat-mdc-form-field {
+    font-size: 0.95rem !important;
+  }
+
+  @media (max-width: 768px) {
+    .payment-popup {
+      margin: 1rem;
+    }
+  }
+
+  @media (max-width: 576px) {
+    mat-card-title {
+      font-size: 1rem !important;
+    }
+    .btn-lg {
+      font-size: 0.9rem;
+    }
+  }

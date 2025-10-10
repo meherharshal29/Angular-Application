@@ -1,4 +1,3 @@
-/* home.component.scss */
 .example-spacer {
   flex: 1 1 auto;
 }
@@ -110,4 +109,8 @@ a {
   filter: blur(2px);
   pointer-events: none; 
   transition: filter 0.3s ease;
+}
+
+ngx-loading {
+  z-index: 2000; // higher than any navbar or content
 }

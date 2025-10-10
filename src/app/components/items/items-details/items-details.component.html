@@ -147,11 +147,11 @@
                   Feedback cannot exceed 500 characters.
                 </mat-error>
               </mat-form-field>
-              <div class="w-100 d-flex justify-content-end">
+              <div class="d-flex justify-content-end">
                 <button
                   mat-raised-button
                   color="primary"
-                  class="w-25 mt-2"
+                  class="mt-2"
                   type="submit"
                   [disabled]="feedbackForm.invalid || isLoading"
                 >
@@ -201,8 +201,6 @@
                 {{ f.createdAt | date : "medium" }}
               </p>
             </mat-card>
-
-            \
             <div *ngIf="feedbacks.length > 2" class="text-center mt-4">
               <button
                 mat-stroked-button

@@ -101,7 +101,7 @@ export class ProfileComponent implements OnInit {
           password: this.userForm.get('password')!.value 
         };
 
-        this.authService.updateUser(updatedUser, oldEmail);
+        this.authService.updateUser(updatedUser);
         this.currentUser = updatedUser;
         this.snackBar.open('Profile updated successfully!', 'Close', { duration: 3000 });
 

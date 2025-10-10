@@ -68,7 +68,8 @@ import { NgxSpinnerModule } from 'ngx-spinner';
     MatBadgeModule,
     MatChipsModule,
     MatAutocompleteModule,
-    NgxSpinnerModule
+    NgxSpinnerModule,
+    
   ]
 })
 export class MaterialModule {}

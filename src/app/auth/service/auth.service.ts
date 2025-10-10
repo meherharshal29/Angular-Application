@@ -2,11 +2,12 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
 export interface User {
-[x: string]: any;
   fullName: string;
   email: string;
   password: string;
+  isActive?: boolean;
 }
+
 interface Item {
   name: string;
   quantity: number;
@@ -21,20 +22,24 @@ export class AuthService {
   private storageKey = 'users';
   private currentUserKey = 'currentUser';
   private itemsKeyPrefix = 'items_';
+  private activeUsersKey = 'activeUsers';
+
   private currentUserSubject = new BehaviorSubject<User | null>(this.getCurrentUserFromStorage());
   currentUser$ = this.currentUserSubject.asObservable();
 
   constructor() {}
+
+  private isBrowser(): boolean {
+    return typeof window !== 'undefined' && typeof localStorage !== 'undefined';
+  }
 
   register(user: User): boolean {
     const users = this.getUsers();
     const exists = users.find(u => u.email.toLowerCase() === user.email.toLowerCase());
     if (exists) return false;
 
-    users.push({ ...user, email: user.email.toLowerCase() });
-    if (typeof window !== 'undefined') {
-      localStorage.setItem(this.storageKey, JSON.stringify(users));
-    }
+    users.push({ ...user, email: user.email.toLowerCase(), isActive: false });
+    if (this.isBrowser()) localStorage.setItem(this.storageKey, JSON.stringify(users));
     return true;
   }
 
@@ -44,8 +49,14 @@ export class AuthService {
       u => u.email.toLowerCase() === email.toLowerCase() && u.password === password
     );
     if (user) {
-      if (typeof window !== 'undefined') {
+      // Set all users to inactive
+      users.forEach(u => u.isActive = false);
+      // Set only the logged-in user to active
+      user.isActive = true;
+      if (this.isBrowser()) {
         localStorage.setItem(this.currentUserKey, JSON.stringify(user));
+        localStorage.setItem(this.storageKey, JSON.stringify(users));
+        this.addActiveUserEmail(user.email);
       }
       this.currentUserSubject.next(user);
       return true;
@@ -54,7 +65,14 @@ export class AuthService {
   }
 
   logout(): void {
-    if (typeof window !== 'undefined') {
+    const user = this.getCurrentUser();
+    if (user && this.isBrowser()) {
+      const users = this.getUsers();
+      const updatedUsers = users.map(u => 
+        u.email.toLowerCase() === user.email.toLowerCase() ? { ...u, isActive: false } : u
+      );
+      localStorage.setItem(this.storageKey, JSON.stringify(updatedUsers));
+      this.removeActiveUserEmail(user.email);
       localStorage.removeItem(this.currentUserKey);
     }
     this.currentUserSubject.next(null);
@@ -69,42 +87,68 @@ export class AuthService {
   }
 
   private getCurrentUserFromStorage(): User | null {
-    if (typeof window === 'undefined') return null;
+    if (!this.isBrowser()) return null;
     const user = localStorage.getItem(this.currentUserKey);
     return user ? JSON.parse(user) : null;
   }
 
-  private getUsers(): User[] {
-    if (typeof window === 'undefined') return [];
+  getUsers(): User[] {
+    if (!this.isBrowser()) return [];
     const users = localStorage.getItem(this.storageKey);
     return users ? JSON.parse(users) : [];
   }
 
-  updateUser(updatedUser: User, oldEmail?: string): void {
-    const users = this.getUsers();
-    const index = users.findIndex(u => u.email.toLowerCase() === (oldEmail || updatedUser.email).toLowerCase());
-    if (index !== -1) {
-      users[index] = { ...updatedUser, email: updatedUser.email.toLowerCase() };
-      localStorage.setItem(this.storageKey, JSON.stringify(users));
-      localStorage.setItem(this.currentUserKey, JSON.stringify(updatedUser));
-      this.currentUserSubject.next(updatedUser);
+  getUserData(): User[] {
+    return this.getUsers();
+  }
 
-      // Handle items migration if email changed
-      if (oldEmail && oldEmail.toLowerCase() !== updatedUser.email.toLowerCase()) {
-        const items = localStorage.getItem(`${this.itemsKeyPrefix}${oldEmail.toLowerCase()}`);
-        if (items) {
-          localStorage.setItem(`${this.itemsKeyPrefix}${updatedUser.email.toLowerCase()}`, items);
-          localStorage.removeItem(`${this.itemsKeyPrefix}${oldEmail.toLowerCase()}`);
-        }
-      }
+  updateUser(updatedUser: User): void {
+    const users = this.getUsers();
+    const index = users.findIndex(u => u.email.toLowerCase() === updatedUser.email.toLowerCase());
+    if (index !== -1) {
+      // Preserve isActive status of the current user
+      const isActive = users[index].isActive;
+      users[index] = { ...updatedUser, isActive };
+      localStorage.setItem(this.storageKey, JSON.stringify(users));
+    }
+
+    // If current logged-in user is updated, update currentUser
+    const current = this.getCurrentUser();
+    if (current && current.email.toLowerCase() === updatedUser.email.toLowerCase()) {
+      localStorage.setItem(this.currentUserKey, JSON.stringify({ ...updatedUser, isActive: current.isActive }));
+      this.currentUserSubject.next({ ...updatedUser, isActive: current.isActive });
     }
   }
 
+  getActiveUsersEmails(): string[] {
+    if (!this.isBrowser()) return [];
+    const data = localStorage.getItem(this.activeUsersKey);
+    return data ? JSON.parse(data) : [];
+  }
+
+  private addActiveUserEmail(email: string): void {
+    if (!this.isBrowser()) return;
+    const activeEmails = this.getActiveUsersEmails();
+    if (!activeEmails.includes(email.toLowerCase())) {
+      activeEmails.push(email.toLowerCase());
+      localStorage.setItem(this.activeUsersKey, JSON.stringify(activeEmails));
+    }
+  }
+
+  private removeActiveUserEmail(email: string): void {
+    if (!this.isBrowser()) return;
+    const activeEmails = this.getActiveUsersEmails().filter(e => e !== email.toLowerCase());
+    localStorage.setItem(this.activeUsersKey, JSON.stringify(activeEmails));
+  }
+
   saveUserItems(email: string, items: Item[]): void {
-    localStorage.setItem(`${this.itemsKeyPrefix}${email.toLowerCase()}`, JSON.stringify(items));
+    if (this.isBrowser()) {
+      localStorage.setItem(`${this.itemsKeyPrefix}${email.toLowerCase()}`, JSON.stringify(items));
+    }
   }
 
   getUserItems(email: string): Item[] | null {
+    if (!this.isBrowser()) return null;
     const items = localStorage.getItem(`${this.itemsKeyPrefix}${email.toLowerCase()}`);
     return items ? JSON.parse(items) : null;
   }

@@ -6,7 +6,7 @@ import { CommonModule } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../auth/service/auth.service';
-import { NgxLoadingModule } from 'ngx-loading'; // ✅ import
+import { NgxLoadingModule } from 'ngx-loading'; 
 
 @Component({
   selector: 'app-cart',

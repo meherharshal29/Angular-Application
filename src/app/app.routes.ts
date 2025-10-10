@@ -8,29 +8,31 @@ import { FruitsComponent } from './components/fruits/fruits.component';
 import { ItemsComponent } from './components/items/items.component';
 import { ItemsDetailsComponent } from './components/items/items-details/items-details.component';
 import { CartComponent } from './components/cart/cart.component';
+import { BillComponent } from './components/bill/bill.component';
 
 export const routes: Routes = [
   { path: "", component: HomeComponent },
-  { path: "about", component: AboutComponent,canActivate:[authGuard] },
-  { path: "profile", component: ProfileComponent ,canActivate:[authGuard]},
+  { path: "about", component: AboutComponent, canActivate: [authGuard] },
+  { path: "profile", component: ProfileComponent, canActivate: [authGuard] },
   {
-    path:'products',
-    children:[
+    path: 'products',
+    children: [
       {
-      path :'vegetables' , component:VegetableComponent, canActivate:[authGuard]
+        path: 'vegetables', component: VegetableComponent, canActivate: [authGuard]
       },
       {
-        path :'fruits' , component:FruitsComponent , canActivate:[authGuard]
+        path: 'fruits', component: FruitsComponent, canActivate: [authGuard]
       },
       {
-        path : 'items' ,
-        component :ItemsComponent
+        path: 'items',
+        component: ItemsComponent
       },
       { path: 'items/:id', component: ItemsDetailsComponent },
 
     ]
   },
-    { path: 'cart', component: CartComponent },
+  { path: 'cart', component: CartComponent },
+  { path: 'bill', component: BillComponent },
 
   {
     path: "modules",

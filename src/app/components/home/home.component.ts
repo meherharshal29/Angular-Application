@@ -26,24 +26,24 @@ export class HomeComponent {
       email: ['', [Validators.required, Validators.email]]
     });
   }
-   loaderConfig = {
-    animationType: 'fading-circle',
-    backdropBackgroundColour: 'rgba(255, 255, 255, 0.7)', 
-    backdropBorderRadius: '0px',
-    primaryColour: '#4caf50',
-    secondaryColour: '#8bc34a',
-    tertiaryColour: '#c8e6c9',
-    fullScreenBackdrop: true 
-  };
+loaderConfig = {
+  animationType: 'fading-circle',
+  backdropBackgroundColour: 'rgba(0, 0, 0, 0.5)',
+  backdropBorderRadius: '0px',
+  primaryColour: '#4caf50',
+  secondaryColour: '#8bc34a',
+  tertiaryColour: '#c8e6c9',
+  fullScreenBackdrop: true, 
+};
 
-   goToProducts(category: string) {
+goToProducts(category: string) {
   this.loading = true;
 
   setTimeout(() => {
     this.router.navigate(['/products', category]).finally(() => {
       this.loading = false;
     });
-  }, 1000); 
+  }, 500); 
 }
 
     

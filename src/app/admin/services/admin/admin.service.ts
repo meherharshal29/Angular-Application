@@ -66,7 +66,7 @@ export class AdminService {
     if (!this.isBrowser) return;
     localStorage.removeItem('currentAdmin');
     this.isLoggedInSubject.next(false); // Notify login status change
-    this.router.navigate(['/modules/admin/admin']); // Redirect to admin login page
+    this.router.navigate(['/modules/admin']); // Redirect to admin login page
   }
 
   // Check if admin is logged in
