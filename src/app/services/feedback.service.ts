@@ -16,7 +16,7 @@ export interface Feedback {
   providedIn: 'root'
 })
 export class FeedbackService {
-  private apiUrl = 'http://localhost:8080/api/feedback';
+  private apiUrl = 'http://localhost:8081/api/feedback';
 
   constructor(private http: HttpClient) {}
 

@@ -97,6 +97,8 @@ export class NavbarComponent implements OnInit, OnDestroy {
           }
           this.router.navigateByUrl(this.router.url);
         }
+
+        
   /** Open offcanvas cart **/
   openCartOffcanvas(): void {
     if (!this.isLoggedIn) {

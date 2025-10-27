@@ -10,7 +10,7 @@ import { MaterialModule } from '../../../shared/materials/material/material.modu
   selector: 'app-delete-register-user',
   standalone: true,
   imports: [MatButtonModule, CommonModule,MaterialModule],
-  templateUrl: './delete-register-user.component.html',
+  templateUrl:'./delete-register-user.component.html',
   styleUrls: ['./delete-register-user.component.scss']
 })
 export class DeleteRegisterUserComponent {
@@ -25,24 +25,24 @@ export class DeleteRegisterUserComponent {
     @Inject(MAT_DIALOG_DATA) public data: { email: string }
   ) 
   {
-    this.users = this.authService.getUsers();
+    // this.users = this.authService.getUsers();
     this.currentUser = this.authService.getCurrentUser();
   }
 
-  confirmDelete(): void {
-    if (this.currentUser?.email === this.data.email) {
-      this.toastr.error("You cannot delete the currently logged-in user!");
-      this.dialogRef.close(false);
-      return;
-    }
+  // confirmDelete(): void {
+  //   if (this.currentUser?.email === this.data.email) {
+  //     this.toastr.error("You cannot delete the currently logged-in user!");
+  //     this.dialogRef.close(false);
+  //     return;
+  //   }
 
-    const updatedUsers = this.users.filter(u => u.email !== this.data.email);
-    localStorage.setItem('users', JSON.stringify(updatedUsers));
-    this.toastr.warning('User deleted successfully!');
-    this.dialogRef.close(true); 
-  }
+  //   const updatedUsers = this.users.filter(u => u.email !== this.data.email);
+  //   localStorage.setItem('users', JSON.stringify(updatedUsers));
+  //   this.toastr.warning('User deleted successfully!');
+  //   this.dialogRef.close(true); 
+  // }
 
-  cancel(): void {
-    this.dialogRef.close(false);
-  }
+  // cancel(): void {
+  //   this.dialogRef.close(false);
+  // }
 }

@@ -16,9 +16,9 @@ export const authGuard: CanActivateFn = (route, state) => {
     return true;
   } else {
     setTimeout(() => {
-      notification.showNotification('Please login to access this page', 'warning');
-    },1000);
-    router.navigate(['/auth/login']);
+      // notification.showNotification('Please login to access this page', 'warning');
+      router.navigate(['/auth/login']);
+    },100);
     return false;
   }
 };

@@ -1,162 +1,109 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { MaterialModule } from '../../shared/materials/material/material.module';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { MatTableDataSource } from '@angular/material/table';
-import { Router } from '@angular/router';
 import { AuthService, User } from '../../auth/service/auth.service';
-
-interface Item {
-  name: string;
-  quantity: number;
-  price: number;
-}
+import { ToastrService } from 'ngx-toastr';
+import { RouterModule } from '@angular/router';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, FormsModule, MaterialModule],
+  imports: [CommonModule, MaterialModule, RouterModule, ReactiveFormsModule],
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.scss']
 })
 export class ProfileComponent implements OnInit {
-  userForm!: FormGroup;
-  itemForm!: FormGroup;
-  settingsForm!: FormGroup;
   currentUser: User | null = null;
-  items: Item[] = [];
-  dataSource = new MatTableDataSource<Item>([]);
-  displayedColumns: string[] = ['name', 'quantity', 'price', 'total', 'action'];
-  totalBill = 0;
-  passwordVisible = false;
-  // Progress bar properties for Profile Details
-  isProfileLoading = false;
-  showProfileProgress = false;
-  profileProgress = 0;
+  profileForm: FormGroup;
+  isEditing = false;
+  isLoading = false;
+  showPassword = false;
 
   constructor(
-    private fb: FormBuilder,
     private authService: AuthService,
-    private snackBar: MatSnackBar,
-    private router: Router
-  ) {}
+    private toastr: ToastrService,
+    private fb: FormBuilder
+  ) {
+    this.profileForm = this.fb.group({
+      fullName: ['', [Validators.required, Validators.minLength(2)]],
+      email: ['', [Validators.required, Validators.email]],
+      password: [''] // optional: only if user wants to change password
+    });
+  }
 
   ngOnInit(): void {
-    this.currentUser = this.authService.getCurrentUser();
-    if (!this.currentUser) {
-      this.router.navigate(['/login']);
-      return;
+    this.authService.currentUser$.subscribe({
+      next: (user) => {
+        this.currentUser = user;
+        if (user) {
+          this.profileForm.patchValue({
+            fullName: user.fullName || '',
+            email: user.email
+          });
+        } 
+        // else {
+        //   this.toastr.warning('Please log in to view your profile', 'Warning');
+        // }
+      },
+      error: (err) => this.toastr.error(err.message || 'Failed to load user data')
+    });
+  }
+
+  toggleEdit(): void {
+    this.isEditing = !this.isEditing;
+    if (!this.isEditing && this.currentUser) {
+      this.profileForm.patchValue({
+        fullName: this.currentUser.fullName,
+        email: this.currentUser.email
+      });
     }
-
-    this.userForm = this.fb.group({
-      fullName: [this.currentUser.fullName, [Validators.required, Validators.minLength(2)]],
-      email: [this.currentUser.email, [Validators.required, Validators.email]],
-      password: [this.currentUser.password, [Validators.minLength(6)]]
-    });
-
-    this.itemForm = this.fb.group({
-      name: ['', Validators.required],
-      quantity: [1, [Validators.required, Validators.min(1)]],
-      price: [0, [Validators.required, Validators.min(0.01)]]
-    });
-
-    this.settingsForm = this.fb.group({
-      contactNumber: ['', [Validators.pattern(/^\+?\d{10,15}$/)]]
-    });
-
-    this.loadItems();
   }
 
   togglePasswordVisibility(): void {
-    this.passwordVisible = !this.passwordVisible;
+    this.showPassword = !this.showPassword;
   }
 
-  saveProfile(): void {
-    if (this.userForm.invalid || this.userForm.pristine || this.isProfileLoading) {
-      this.snackBar.open('Please fill all required fields correctly!', 'Close', { duration: 3000 });
+  onSubmit(): void {
+    if (this.profileForm.invalid) {
+      this.toastr.error('Please fill in all fields correctly', 'Error');
       return;
     }
 
-    if (!this.currentUser) return;
+    if (!this.currentUser) {
+      this.toastr.warning('You must be logged in to update profile', 'Warning');
+      return;
+    }
 
-    this.isProfileLoading = true;
-    this.showProfileProgress = true;
-    this.profileProgress = 0;
+    this.isLoading = true;
 
-    const interval = setInterval(() => {
-      this.profileProgress += 10;
-      if (this.profileProgress >= 100) {
-        clearInterval(interval);
-        this.showProfileProgress = false;
-        this.isProfileLoading = false;
+    const updatedUser: User = {
+      fullName: this.profileForm.value.fullName,
+      email: this.profileForm.value.email
+    };
 
-        const newEmail = this.userForm.get('email')!.value;
-        const oldEmail = this.currentUser ? this.currentUser.email : '';
+    // Include password only if user enters it
+    if (this.profileForm.value.password) {
+    }
 
-        const updatedUser: User = {
-          ...this.currentUser!,
-          fullName: this.userForm.get('fullName')!.value,
-          email: newEmail,
-          password: this.userForm.get('password')!.value 
-        };
-
-        this.authService.updateUser(updatedUser);
-        this.currentUser = updatedUser;
-        this.snackBar.open('Profile updated successfully!', 'Close', { duration: 3000 });
-
-        if (newEmail !== oldEmail) {
-          this.loadItems();
+    this.authService.updateUser(updatedUser).subscribe({
+      next: (success) => {
+        this.isLoading = false;
+        if (success) {
+          this.isEditing = false;
+          this.toastr.success('Profile updated successfully', 'Success');
         }
+      },
+      error: (err) => {
+        this.isLoading = false;
+        this.toastr.error(err.message || 'Failed to update profile', 'Error');
       }
-    }, 300);
+    });
   }
 
-  addItem(): void {
-    if (this.itemForm.invalid) {
-      this.snackBar.open('Enter valid item details!', 'Close', { duration: 3000 });
-      return;
-    }
-
-    const newItem: Item = this.itemForm.value;
-    this.items.push(newItem);
-    this.dataSource.data = this.items;
-    this.saveItems();
-    this.calculateTotal();
-    this.itemForm.reset({ name: '', quantity: 1, price: 0 });
-    this.snackBar.open('Item added successfully!', 'Close', { duration: 3000 });
-  }
-
-  removeItem(index: number): void {
-    this.items.splice(index, 1);
-    this.dataSource.data = this.items;
-    this.saveItems();
-    this.calculateTotal();
-  }
-
-  saveSettings(): void {
-    if (this.settingsForm.invalid || this.settingsForm.pristine) {
-      this.snackBar.open('Please enter a valid contact number!', 'Close', { duration: 3000 });
-      return;
-    }
-
-    this.snackBar.open('Settings updated successfully!', 'Close', { duration: 3000 });
-  }
-
-  private loadItems(): void {
-    const userItems = this.authService.getUserItems(this.currentUser!.email);
-    this.items = userItems || [];
-    this.dataSource.data = this.items;
-    this.calculateTotal();
-  }
-
-  private saveItems(): void {
-    if (this.currentUser) {
-      this.authService.saveUserItems(this.currentUser.email, this.items);
-    }
-  }
-
-  private calculateTotal(): void {
-    this.totalBill = this.items.reduce((sum, item) => sum + item.quantity * item.price, 0);
+  logout(): void {
+    this.authService.logout();
+    this.currentUser = null;
+    this.toastr.info('Logged out successfully', 'Info');
   }
 }

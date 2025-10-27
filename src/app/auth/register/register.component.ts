@@ -7,11 +7,12 @@ import { AuthService } from '../service/auth.service';
 import { MaterialModule } from '../../shared/materials/material/material.module';
 import { Observable } from 'rxjs';
 import { ProgressBarService } from '../../services/progess-bar.service';
+import { HttpClientModule } from '@angular/common/http';
 
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [FormsModule, ReactiveFormsModule, CommonModule,RouterModule,MaterialModule],
+  imports: [FormsModule, ReactiveFormsModule, CommonModule, RouterModule, MaterialModule, HttpClientModule],
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.scss']
 })
@@ -22,7 +23,6 @@ export class RegisterComponent implements OnInit {
   cShowPassword = false;
   showProgress$!: Observable<boolean>;
   progress$!: Observable<number>;
-
 
   constructor(
     private fb: FormBuilder,
@@ -45,36 +45,42 @@ export class RegisterComponent implements OnInit {
   }
 
   togglePasswordVisibility() {
-    this.showPassword =!this.showPassword;
-  }  
-  togglePasswordVisibility1() {
-    this.cShowPassword =!this.cShowPassword;
+    this.showPassword = !this.showPassword;
   }
+
+  togglePasswordVisibility1() {
+    this.cShowPassword = !this.cShowPassword;
+  }
+
   passwordMatch(form: FormGroup) {
     return form.get('password')?.value === form.get('confirmPassword')?.value
       ? null : { mismatch: true };
   }
 
- onSubmit(): void {
-  if (this.registerForm.valid && !this.isLoading) {
-    this.isLoading = true;
-
-    this.progressService.simulateProgress(() => {
-      const { fullName, email, password } = this.registerForm.value;
-      return Promise.resolve(this.authService.register({ fullName, email: email.toLowerCase(), password }));
-    }).then((success) => {
-      if (success) {
-        this.toastr.success('Registration successful!', 'Success');
-        setTimeout(() => {
-          this.router.navigate(['/auth/login']);
-        }, 2000);
-      } else {
-        this.toastr.error('Email already exists', 'Error');
-      }
-      this.isLoading = false;
-    });
-  } else {
-    this.toastr.error('Please fill in all fields correctly.', 'Error');
+  onSubmit(): void {
+    if (this.registerForm.valid && !this.isLoading) {
+      this.isLoading = true;
+      this.progressService.simulateProgress(() => {
+        const { fullName, email, password } = this.registerForm.value;
+        return this.authService.register({ fullName, email: email.toLowerCase(), password })
+          .toPromise()
+          .then(result => result ?? false); // Ensure boolean return
+      }).then((success) => {
+        if (success) {
+          this.toastr.success('Registration successful! Please login.', 'Success');
+          setTimeout(() => {
+            this.router.navigate(['/auth/login']);
+          }, 2000);
+        } else {
+          this.toastr.error('Registration failed', 'Error');
+        }
+      }).catch((error) => {
+        this.toastr.error(error.message || 'Registration failed', 'Error');
+      }).finally(() => {
+        this.isLoading = false;
+      });
+    } else {
+      this.toastr.error('Please fill in all fields correctly.', 'Error');
+    }
   }
-}
 }

@@ -69,7 +69,7 @@ export class CartComponent implements OnInit {
   increaseQuantity(item: any): void {
     if (!this.isLoggedIn) {
       this.toastr.warning('Please log in to modify your cart', 'Warning');
-      this.router.navigate(['/login']);
+      this.router.navigate(['/auth/login']);
       return;
     }
     this.loading = true;
@@ -82,7 +82,7 @@ export class CartComponent implements OnInit {
   decreaseQuantity(item: any): void {
     if (!this.isLoggedIn) {
       this.toastr.warning('Please log in to modify your cart', 'Warning');
-      this.router.navigate(['/login']);
+      this.router.navigate(['/auth/login']);
       return;
     }
     this.loading = true;
@@ -99,7 +99,7 @@ export class CartComponent implements OnInit {
   removeFromCart(item: any): void {
     if (!this.isLoggedIn) {
       this.toastr.warning('Please log in to modify your cart', 'Warning');
-      this.router.navigate(['/login']);
+      this.router.navigate(['/auth/login']);
       return;
     }
     this.loading = true;

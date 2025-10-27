@@ -13,18 +13,18 @@ import { FormsModule } from '@angular/forms';
   styleUrls: ['./update-register-user.component.scss']
 })
 export class UpdateRegisterUserComponent {
-
-  constructor(
-    public dialogRef: MatDialogRef<UpdateRegisterUserComponent>,
-    @Inject(MAT_DIALOG_DATA) public user: User
-  ) {}
-
-  onCancel(): void {
-    this.dialogRef.close(null);
-  }
-
-  onSave(): void {
-    if (!this.user.fullName.trim() || !this.user.email.trim() || !this.user.password.trim()) return;
-    this.dialogRef.close(this.user);
-  }
 }
+//   constructor(
+//     public dialogRef: MatDialogRef<UpdateRegisterUserComponent>,
+//     @Inject(MAT_DIALOG_DATA) public user: User
+//   ) {}
+
+//   onCancel(): void {
+//     this.dialogRef.close(null);
+//   }
+
+//   onSave(): void {
+//     if (!this.user.fullName.trim() || !this.user.email.trim() || !this.user.password.trim()) return;
+//     this.dialogRef.close(this.user);
+//   }
+// }
